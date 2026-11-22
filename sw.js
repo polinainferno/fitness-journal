@@ -1,6 +1,6 @@
 // Service Worker для офлайн-работы
 
-const CACHE_NAME = 'fitness-journal-v2';
+const CACHE_NAME = 'fitness-journal-v3';
 const urlsToCache = [
     '/',
     '/index.html',
