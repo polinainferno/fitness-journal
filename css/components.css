@@ -366,3 +366,90 @@
         font-size: 0.7rem;
     }
 }
+
+/* Компактный календарь и точки */
+.calendar-card {
+    padding: 16px;
+}
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-size: 1.2rem;
+    padding: 4px 8px;
+    box-shadow: none;
+}
+.icon-btn:hover { transform: none; box-shadow: none; background: var(--bg-tertiary); border-radius: 50%; }
+.today-btn {
+    width: 100%;
+    background-color: var(--bg-tertiary);
+    color: var(--accent);
+    font-size: 0.85rem;
+    padding: 8px;
+    margin-bottom: 12px;
+    box-shadow: none;
+}
+.today-btn:hover { transform: none; box-shadow: none; }
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px; /* Уменьшили отступы */
+}
+.weekday {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    padding: 4px 0;
+}
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.2s;
+}
+.calendar-day:hover { background-color: var(--bg-tertiary); }
+.calendar-day.today {
+    background-color: var(--accent);
+    color: white;
+}
+.calendar-day.today .workout-dot { background-color: white; }
+.day-number { font-size: 0.9rem; font-weight: 500; }
+.workout-dot {
+    width: 4px;
+    height: 4px;
+    background-color: var(--accent);
+    border-radius: 50%;
+    margin-top: 2px;
+}
+
+/* Строки подходов и кнопки удаления */
+.set-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+.exercise-item { margin-bottom: 12px; padding: 16px; }
+.exercise-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px; }
+.delete-btn {
+    background: none;
+    color: #ff3b30;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    box-shadow: none;
+}
+.delete-btn:hover { background: rgba(255,59,48,0.1); transform: none; box-shadow: none; }
