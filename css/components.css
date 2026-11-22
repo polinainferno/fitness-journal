@@ -453,3 +453,126 @@
     box-shadow: none;
 }
 .delete-btn:hover { background: rgba(255,59,48,0.1); transform: none; box-shadow: none; }
+
+/* Автодополнение (Пункт 4) */
+.autocomplete-wrapper {
+    position: relative;
+}
+
+.autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-top: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 8px 24px var(--shadow-lg);
+    display: none;
+}
+
+.ac-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    transition: background 0.15s;
+}
+
+.ac-item:hover {
+    background-color: var(--bg-secondary);
+}
+
+.ac-group {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.ac-create {
+    color: var(--accent);
+    font-weight: 500;
+}
+
+/* Форма подходов */
+.ex-form-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: -8px 0 16px 0;
+}
+
+.sets-list {
+    margin-bottom: 16px;
+}
+
+.sets-empty {
+    color: var(--text-secondary);
+    text-align: center;
+    font-size: 0.9rem;
+    padding: 12px;
+    background-color: var(--bg-tertiary);
+    border-radius: 10px;
+}
+
+.new-set-block {
+    background-color: var(--bg-tertiary);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 8px;
+}
+
+.set-row.editing {
+    background-color: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+}
+
+/* Маленькие кнопки для подходов */
+.tiny-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+    box-shadow: none;
+    font-weight: 500;
+}
+
+.tiny-btn:hover {
+    background-color: var(--bg-primary);
+    transform: none;
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+.tiny-btn.delete {
+    color: #ff3b30;
+    border-color: rgba(255, 59, 48, 0.3);
+}
+
+.tiny-btn.delete:hover {
+    background-color: rgba(255, 59, 48, 0.1);
+    color: #ff3b30;
+}
+
+/* Кнопка "Изменить" в карточке упражнения */
+.edit-btn {
+    background: none;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    font-size: 0.8rem;
+    padding: 4px 10px;
+    border-radius: 8px;
+    box-shadow: none;
+}
+
+.edit-btn:hover {
+    background-color: var(--bg-tertiary);
+    transform: none;
+    box-shadow: none;
+}
