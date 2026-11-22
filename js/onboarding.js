@@ -1,20 +1,20 @@
 // Логика онбординга (регистрации)
 
-let onboardingData = {}; // Временное хранилище данных между шагами
+let onboardingData = {};
 
-// Показываем первый шаг онбординга
 function renderOnboardingStep1() {
-    const container = document.getElementById('view-container');
+    const container = document.getElementById('main-content') || document.getElementById('view-container');
     container.innerHTML = `
         <div class="card" style="max-width: 500px; margin: 40px auto;">
             <h2>Расскажите о себе</h2>
             <div class="form-group">
                 <label>Ваше имя</label>
                 <input type="text" id="ob-name" placeholder="Например, Анна" required>
+                <div class="field-error" id="error-name"></div>
             </div>
             <div class="form-group">
                 <label>Пол</label>
-                <select id="ob-gender">
+                <select id="ob-gender" onchange="updateNamePlaceholder()">
                     <option value="female">Женский</option>
                     <option value="male">Мужской</option>
                 </select>
@@ -22,30 +22,56 @@ function renderOnboardingStep1() {
             <div class="form-group">
                 <label>Дата рождения</label>
                 <input type="date" id="ob-dob" required>
+                <div class="field-error" id="error-dob"></div>
             </div>
             <button onclick="goToOnboardingStep2()" style="width: 100%; margin-top: 10px;">Продолжить</button>
         </div>
     `;
 }
 
-// Переход ко второму шагу с проверкой первого
+// Обновление плейсхолдера в зависимости от пола
+function updateNamePlaceholder() {
+    const gender = document.getElementById('ob-gender').value;
+    const nameInput = document.getElementById('ob-name');
+    if (gender === 'male') {
+        nameInput.placeholder = 'Например, Дмитрий';
+    } else {
+        nameInput.placeholder = 'Например, Анна';
+    }
+}
+
 function goToOnboardingStep2() {
     const name = document.getElementById('ob-name').value.trim();
     const gender = document.getElementById('ob-gender').value;
     const dob = document.getElementById('ob-dob').value;
 
-    if (!name || !dob) {
-        alert('Пожалуйста, заполните имя и дату рождения');
-        return;
+    // Проверяем поля и показываем ошибки
+    let hasErrors = false;
+    
+    const errorName = document.getElementById('error-name');
+    const errorDob = document.getElementById('error-dob');
+    
+    if (errorName) errorName.textContent = '';
+    if (errorDob) errorDob.textContent = '';
+
+    if (!name) {
+        if (errorName) errorName.textContent = 'Пожалуйста, заполните имя';
+        hasErrors = true;
     }
+
+    if (!dob) {
+        if (errorDob) errorDob.textContent = 'Пожалуйста, заполните дату рождения';
+        hasErrors = true;
+    }
+
+    if (hasErrors) return;
 
     onboardingData = { name, gender, dob };
     renderOnboardingStep2();
 }
 
-// Показываем второй шаг онбординга
 function renderOnboardingStep2() {
-    const container = document.getElementById('view-container');
+    const container = document.getElementById('main-content') || document.getElementById('view-container');
     container.innerHTML = `
         <div class="card" style="max-width: 500px; margin: 40px auto;">
             <h2>Ваши цели и параметры</h2>
@@ -54,6 +80,7 @@ function renderOnboardingStep2() {
                 <select id="ob-goal">
                     <option value="lose">Похудеть</option>
                     <option value="gain">Набрать мышечную массу</option>
+                    <option value="unknown">Пока не знаю</option>
                 </select>
             </div>
             <div class="form-group">
@@ -65,8 +92,8 @@ function renderOnboardingStep2() {
                 <input type="number" id="ob-current-weight" placeholder="65" required>
             </div>
             <div class="form-group">
-                <label>Целевой вес (кг)</label>
-                <input type="number" id="ob-target-weight" placeholder="60" required>
+                <label>Целевой вес (кг) <span style="color: var(--text-secondary); font-size: 0.85rem;">(необязательно)</span></label>
+                <input type="number" id="ob-target-weight" placeholder="60">
             </div>
             
             <div id="bmi-warning" class="warning" style="display: none;">
@@ -82,12 +109,10 @@ function renderOnboardingStep2() {
         </div>
     `;
 
-    // Добавляем слушатель для живой проверки ИМТ при вводе целевого веса
     document.getElementById('ob-target-weight').addEventListener('input', checkBMI);
     document.getElementById('ob-height').addEventListener('input', checkBMI);
 }
 
-// Проверка ИМТ в реальном времени
 function checkBMI() {
     const height = parseFloat(document.getElementById('ob-height').value);
     const targetWeight = parseFloat(document.getElementById('ob-target-weight').value);
@@ -105,20 +130,26 @@ function checkBMI() {
     }
 }
 
-// Завершение онбординга и сохранение в базу
 async function finishOnboarding() {
     const goal = document.getElementById('ob-goal').value;
     const height = parseFloat(document.getElementById('ob-height').value);
     const currentWeight = parseFloat(document.getElementById('ob-current-weight').value);
-    const targetWeight = parseFloat(document.getElementById('ob-target-weight').value);
+    const targetWeightValue = document.getElementById('ob-target-weight').value;
+    const targetWeight = targetWeightValue ? parseFloat(targetWeightValue) : null;
 
-    if (!height || !currentWeight || !targetWeight) {
-        alert('Пожалуйста, заполните все поля с параметрами');
+    if (!height || !currentWeight) {
+        showModal(`
+            <h3>Ошибка</h3>
+            <p style="color: var(--text-secondary);">Пожалуйста, заполните рост и текущий вес</p>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Понятно</button>
+            </div>
+        `);
         return;
     }
 
     const profile = {
-        id: 'profile', // Ключ для хранилища
+        id: 'profile',
         name: onboardingData.name,
         gender: onboardingData.gender,
         dob: onboardingData.dob,
@@ -132,10 +163,16 @@ async function finishOnboarding() {
 
     try {
         await saveData(STORES.USER, profile);
-        currentUser = profile; // Обновляем глобальную переменную
-        showMainApp(); // Переходим в главное приложение
+        currentUser = profile;
+        showMainApp();
     } catch (error) {
         console.error('Ошибка сохранения профиля:', error);
-        alert('Не удалось сохранить данные. Попробуйте ещё раз.');
+        showModal(`
+            <h3>Ошибка</h3>
+            <p style="color: var(--text-secondary);">Не удалось сохранить данные. Попробуйте ещё раз.</p>
+            <div class="modal-actions">
+                <button onclick="closeModal()">Понятно</button>
+            </div>
+        `);
     }
 }
