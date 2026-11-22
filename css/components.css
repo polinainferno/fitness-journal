@@ -576,3 +576,22 @@
     transform: none;
     box-shadow: none;
 }
+
+/* Тултип для графика прогресса (Пункт 16) */
+.chart-tooltip {
+    margin-top: 16px;
+    background-color: var(--bg-tertiary);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    display: none;
+    animation: fadeIn 0.2s ease;
+    border: 1px solid var(--border);
+}
+
+.chart-tooltip strong {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--accent);
+    font-size: 1rem;
+}
